@@ -20,7 +20,7 @@ class Chain(object):
             if not cur_block.is_valid():
                 print('Block invalid')
                 return False
-            if prev_block.hash != cur_block.prev_hash
+            if prev_block.hash != cur_block.prev_hash:
                 print('Hash error')
                 return False
         return True

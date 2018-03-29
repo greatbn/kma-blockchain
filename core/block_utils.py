@@ -1,6 +1,7 @@
 from config import *
 import datetime
 import block
+import uuid
 
 def is_valid_chain(blockchain):
     """
@@ -23,7 +24,9 @@ def dict_from_block_attributes(**kwargs):
     return info
 
 
-def create_new_block_from_prev(prev_block=None, data=None, timestamp=None):
+def create_new_block_from_prev(prev_block=None, data=None, timestamp=None, txid=None):
+    if not txid:
+        txid = str(uuid.uuid4())
     if not prev_block:
         index = 0
         prev_hash = ''
@@ -40,7 +43,8 @@ def create_new_block_from_prev(prev_block=None, data=None, timestamp=None):
         timestamp=timestamp,
         data=data,
         prev_hash=prev_hash,
-        nonce=nonce)
+        nonce=nonce,
+        txid=txid)
     new_block = block.Block(block_info_dict)
     return new_block
 

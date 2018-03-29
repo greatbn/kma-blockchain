@@ -18,7 +18,7 @@ class Block(object):
         """
         convert block to string
         """
-        return str(self.index) + self.prev_hash + self.data + str(self.timestamp) + str(self.nonce)
+        return str(self.index) + self.prev_hash + self.data + str(self.timestamp) + str(self.nonce) + str(self.txid)
     
     def update_self_hash(self):
         sha = hashlib.sha256()
@@ -32,7 +32,7 @@ class Block(object):
         Save to local file
         """
         index = str(self.index).zfill(6)
-        filename = '%s%s' % (CHAINDATA_DIR, index)
+        filename = '%s%s.json' % (CHAINDATA_DIR, index)
         with open(filename, 'w') as block_file:
             json.dump(self.to_dict(), block_file)
 
@@ -47,6 +47,7 @@ class Block(object):
         info['hash'] = str(self.hash)
         info['data'] = str(self.data)
         info['nonce'] = str(self.nonce)
+        info['txid'] = str(self.txid)
         return info
 
     def is_valid(self):
