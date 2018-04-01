@@ -83,12 +83,12 @@ class MongoDBWrapper(object):
         # query one pending transaction
         try:
             data = self.tx.find_one()
-            if dict(data):
+            if data:
                 return json.loads(json_util.dumps(dict(data)))
             else:
                 return False
         except Exception as e:
-            raise Exception("Cannot get a pending transaction")
+            raise Exception("Cannot get a pending transaction %s" % e)
 
     def add_mining_tx(self, txid):
         # add mining txid
