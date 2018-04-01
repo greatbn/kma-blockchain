@@ -4,16 +4,24 @@ import json
 from config import *
 
 class Block(object):
-    def __init__(self, data):
+    def __init__(self, dictionary):
         """
-        Find field: index, timestamp, data, prev_hash, nonce
+        Find field: index, timestamp, data, prev_hash, nonce, txid
         """
-        for key, value in data.items():
+        for key, value in dictionary.items():
             if key in BLOCK_VAR_CONVERSIONS:
                 setattr(self, key, BLOCK_VAR_CONVERSIONS[key](value))
             else:
                 setattr(self, key, value)
-    
+        # print dictionary
+        # self.index = int(dictionary['index'])
+        # self.timestamp = str(dictionary['timestamp'])
+        # self.prev_hash = str(dictionary['prev_hash'])
+        # self.nonce = int(dictionary['nonce'])
+        # self.txid = str(dictionary['txid'])
+        # self.data = dictionary['data']
+        # self.hash = str(dictionary['hash'])
+
     def header_string(self):
         """
         convert block to string
