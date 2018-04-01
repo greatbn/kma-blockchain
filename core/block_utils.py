@@ -31,7 +31,7 @@ def create_new_block_from_prev(prev_block=None, data=None, timestamp=None, txid=
         index = 0
         prev_hash = ''
     else:
-        index = int(prev_block.index) + 1
+        index = prev_block.index + 1
         prev_hash = prev_block.hash
 
     if not timestamp:
