@@ -65,7 +65,6 @@ def mine_for_block(sched, mongo_conn):
         return False
     try:
         pending_tx = mongo_conn.query_a_pending_transaction()
-        print pending_tx
         if pending_tx:
             # add to pending 
             mongo_conn.add_mining_tx(pending_tx['txid'])
@@ -90,7 +89,6 @@ def proof_of_work(blockchain, data=None):
     if data:
         print "Starting Proof of Work"
         prev_block = blockchain.most_recent_block()
-        print prev_block.to_dict()
         txid = data['txid']
         nonce = 0
         # build block
@@ -105,7 +103,6 @@ def proof_of_work(blockchain, data=None):
             data=data)
         
         new_block.update_self_hash()
-        print new_block.to_dict()
         while str(new_block.hash[0:NUM_ZEROS]) != '0' * NUM_ZEROS:
             new_block.nonce += 1
             new_block.update_self_hash()
