@@ -7,7 +7,8 @@ MONGODB_DBNAME = os.getenv('MONGODB_DBNAME', 'blockchain')
 #REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', None)
 MONGODB_COLLECTIONS = {
     'pending_transactions': 'transactions',
-    'list_nodes': 'nodes'
+    'list_nodes': 'nodes',
+    'mining': 'mining'
 }
 
 SEED_NODES = [

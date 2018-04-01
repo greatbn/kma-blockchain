@@ -11,6 +11,11 @@ app = Flask(__name__)
 mongo_conn = utils.MongoDBWrapper()
 sched = BackgroundScheduler(standalone=True)
 
+import logging
+
+logging.basicConfig()
+logging.getLogger('apscheduler').setLevel(logging.INFO)
+
 @app.route('/')
 def index():
     data = {
@@ -26,7 +31,10 @@ def new():
     required = ['author', 'title', 'doc_hash', 's3_url']
     if not all(k in data for k in required):
         return jsonify({'result': 'Missing values'}), 400
-    
+    # TODO
+    # check doc_hash
+    # if doc_hash already in blockchain database
+    # return Document was exist and txid
     # push transaction to mongodb
     txid = mongo_conn.new_pending_transaction(data)
     
@@ -127,6 +135,6 @@ if __name__ == '__main__':
         id='mining-listener'
     )
     sched.start()
-    app.run(debug=True,
+    app.run(debug=False,
             host='0.0.0.0',
             port=int(args.port))

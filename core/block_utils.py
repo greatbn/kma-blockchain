@@ -47,15 +47,3 @@ def create_new_block_from_prev(prev_block=None, data=None, timestamp=None, txid=
         txid=txid)
     new_block = block.Block(block_info_dict)
     return new_block
-
-
-def proof_of_work(find_block, data=None):
-    find_block.nonce = 0
-    find_block.update_self_hash()
-    if not find_block.data:
-        find_block.data = data
-    while str(find_block.hash[0:NUM_ZEROS]) != '0' * NUM_ZEROS:
-        find_block.nonce += 1
-        find_block.update_self_hash()
-    assert find_block.is_valid()
-    return find_block

@@ -18,7 +18,7 @@ class Block(object):
         """
         convert block to string
         """
-        return str(self.index) + self.prev_hash + self.data + str(self.timestamp) + str(self.nonce) + str(self.txid)
+        return str(self.index) + self.prev_hash + str(self.data) + str(self.timestamp) + str(self.nonce) + str(self.txid)
     
     def update_self_hash(self):
         sha = hashlib.sha256()
@@ -45,7 +45,7 @@ class Block(object):
         info['timestamp'] = str(self.timestamp)
         info['prev_hash'] = str(self.prev_hash)
         info['hash'] = str(self.hash)
-        info['data'] = str(self.data)
+        info['data'] = self.data
         info['nonce'] = str(self.nonce)
         info['txid'] = str(self.txid)
         return info

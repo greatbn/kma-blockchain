@@ -41,3 +41,9 @@ class Chain(object):
 
     def block_list_to_dict(self):
         return [b.to_dict() for b in self.blocks]
+
+    def most_recent_block(self):
+        return self.blocks[-1]
+
+    def __len__(self):
+        return len(self.blocks)
