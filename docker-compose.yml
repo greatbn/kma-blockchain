@@ -4,7 +4,7 @@ services:
     build: .
     ports:
       - 5000:500
-    environemt:
+    environment:
       MONGODB_HOST: mongodb
 
   mongodb:
