@@ -6,7 +6,7 @@ import json
 import glob
 from chain import Chain
 from block import Block
-
+import nodes
 mongo_conn = utils.MongoDBWrapper()
 
 def sync_transactions():
@@ -17,7 +17,8 @@ def sync_transactions():
     for tx in pending_transactions:
         pending_txid.append(tx['txid'])
     # check other seed node pending transaction if not exist write to local
-    for node in SEED_NODES:
+    NODES = nodes.get_list_node(mongo_conn)
+    for node in NODES:
         endpoint = "%s%s" % (node, "/pending-transactions")
         try:
             r = requests.get(endpoint)
@@ -41,7 +42,8 @@ def sync_node():
     for node in nodes:
         node_id.append(node['uuid'])
     # check seed nodes if not exist append to list and write to local
-    for node in SEED_NODES:
+    NODES = nodes.get_list_node(mongo_conn)
+    for node in NODES:
         endpoint = "%s%s" % (node, "/confirm-nodes")
         try:
             r = requests.get(endpoint)
@@ -70,7 +72,8 @@ def sync_local():
 
 def sync_overall(save=False):
     local_chain = sync_local()
-    for peer in SEED_NODES:
+    NODES = nodes.get_list_node(mongo_conn)
+    for peer in NODES:
         endpoint = peer + '/blockchain'
         try:
             r = requests.get(endpoint)

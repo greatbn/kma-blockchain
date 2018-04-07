@@ -6,7 +6,7 @@ import block_utils
 from block import Block
 import sync
 from apscheduler.events import EVENT_JOB_EXECUTED
-
+import nodes
 import logging
 
 logging.basicConfig()
@@ -35,7 +35,8 @@ def validate_possible_block(sche, mongo_conn, possible_block, txid):
 
 def broadcast_mined_block(new_block):
     new_block = new_block.__dict__
-    for peer in SEED_NODES:
+    NODES = nodes.get_list_node(mongo_conn)
+    for peer in NODES:
         endpoint = peer + "/mined"
         try:
             r = requests.post(peer, json=new_block)
