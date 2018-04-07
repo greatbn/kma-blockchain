@@ -5,4 +5,4 @@ COPY core/requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY ./core/ /app/
-ENTRYPOINT [ "python", "/app/core/app.py" ]
+ENTRYPOINT [ "python", "app.py" ]
