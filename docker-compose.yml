@@ -1,9 +1,12 @@
 version: "2"
 services:
   node:
-     build: .
-     ports:
-       - 5000:500
+    build: .
+    ports:
+      - 5000:500
+    environemt:
+      MONGODB_HOST: mongodb
+
   mongodb:
     image: mongo
     ports:
