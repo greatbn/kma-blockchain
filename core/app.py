@@ -109,24 +109,24 @@ if __name__ == '__main__':
                         help='what port we will run the node on')
     args = parser.parse_args()
     # sync interval
-    # sched.add_job(
-    #     sync.sync_transactions,
-    #     'interval',
-    #     seconds=10,
-    #     id='sync-transactions'
-    # )
-    # sched.add_job(
-    #     sync.sync_node,
-    #     'interval',
-    #     seconds=10,
-    #     id='sync-nodes'
-    # )
-    # sched.add_job(
-    #     sync.sync_overall,
-    #     'interval',
-    #     seconds=30,
-    #     id='sync-peer'
-    # )
+    sched.add_job(
+        sync.sync_transactions,
+        'interval',
+        seconds=10,
+        id='sync-transactions'
+    )
+    sched.add_job(
+        sync.sync_node,
+        'interval',
+        seconds=10,
+        id='sync-nodes'
+    )
+    sched.add_job(
+        sync.sync_overall,
+        'interval',
+        seconds=30,
+        id='sync-peer'
+    )
     sched.add_job(
         mine.mine_for_block,
         'interval',
