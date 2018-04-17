@@ -11,11 +11,10 @@ MONGODB_COLLECTIONS = {
     'mining': 'mining'
 }
 
-SEED_NODES = [
-    "http://localhost:5000",
-    "http://localhost:5001",
-    "http://localhost:5002"
-]
+ELASTIC_HOSTS = ["elastic"]
+ELASTIC_INDEX = "blockchain"
+
+API_NODE = os.getenv("API_NODE", "http://10.5.9.110:5000")
 
 BLOCK_VAR_CONVERSIONS = {
     'txid': str,
