@@ -3,7 +3,7 @@ services:
   node:
     build: .
     ports:
-      - 5000:500
+      - 5000:5000
     environment:
       MONGODB_HOST: mongodb
 
@@ -12,3 +12,7 @@ services:
     ports:
       - 27017:27017
 
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.3
+    ports:
+      - 9200:9200
