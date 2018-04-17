@@ -128,3 +128,8 @@ class MongoDBWrapper(object):
                 return False
         except Exception as e:
             raise Exception("Cannot check free job %s " % e)
+
+    def flush_data(self):
+        self.tx.drop()
+        self.node.drop()
+        self.mining.drop()
