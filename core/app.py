@@ -5,9 +5,9 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, request, jsonify
 import sync
 import mine
-
+from flask_cors import CORS
 app = Flask(__name__)
-
+CORS(app, resources={r"/*/*": {"origin": "*"}})
 mongo_conn = utils.MongoDBWrapper()
 sched = BackgroundScheduler(standalone=True)
 
@@ -77,7 +77,7 @@ def node_register():
     # check required fields
     required = ['node_address', 'node_port', 'is_confirm']
     if not all(k in node for k in required):
-        return jsonify({'result': 'Missing values'}), 400
+        return jsonify({'message': 'Missing values'}), 400
 
     node_uuid = mongo_conn.register_node(node)
     return jsonify({'node_uuid': node_uuid,
