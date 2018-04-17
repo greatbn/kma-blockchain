@@ -8,6 +8,7 @@ import mine
 from flask_cors import CORS
 import nodes
 import sys
+import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/*/*": {"origin": "*"}})
@@ -115,8 +116,9 @@ if __name__ == '__main__':
     ## before start this node have to register it to API node
     ## and sync overall blockchain database 
     ## then after all, this node can join blockchain network
-    if not nodes.register_self_node(int(args.port)):
-        sys.exit(1)
+    if os.getenv('IS_API_NODE', False):
+        if not nodes.register_self_node(int(args.port)):
+            sys.exit(1)
     sync.sync_overall
     # sync interval
     sched.add_job(
