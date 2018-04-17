@@ -6,6 +6,9 @@ from flask import Flask, request, jsonify
 import sync
 import mine
 from flask_cors import CORS
+import nodes
+import sys
+
 app = Flask(__name__)
 CORS(app, resources={r"/*/*": {"origin": "*"}})
 mongo_conn = utils.MongoDBWrapper()
@@ -108,6 +111,13 @@ if __name__ == '__main__':
     parser.add_argument('--port', '-p', default=5000,
                         help='what port we will run the node on')
     args = parser.parse_args()
+    # pre_start
+    ## before start this node have to register it to API node
+    ## and sync overall blockchain database 
+    ## then after all, this node can join blockchain network
+    if not nodes.register_self_node(int(args.port)):
+        sys.exit(1)
+    sync.sync_overall
     # sync interval
     sched.add_job(
         sync.sync_transactions,
