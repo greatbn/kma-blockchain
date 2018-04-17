@@ -30,7 +30,7 @@ class Chain(object):
         Save blockchain to file system
         """
         for block in self.blocks:
-            b.self_save()
+            block.self_save()
         return True
 
     def add_block(self, new_block):
@@ -47,3 +47,11 @@ class Chain(object):
 
     def __len__(self):
         return len(self.blocks)
+    
+    def find_block_by_hash(self, hash):
+        for b in self.blocks:
+            if b.hash == hash:
+                return b
+        return False
+
+    # def find_block_by_title(self,):

@@ -38,6 +38,10 @@ def register_self_node(port):
         'is_confirm': True
     }
     try:
+        global_nodes = requests.get(API_NODE + "/confirm-nodes").json()['nodes']
+        for node in global_nodes:
+            if node['node_address'] == ip and node['node_port'] == port:
+                return True
         headers = {
             'Content-Type': 'application/json'
         }

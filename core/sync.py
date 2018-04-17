@@ -84,7 +84,7 @@ def sync_overall(save=False):
             if peer_chain.is_valid() and len(peer_chain) > len(local_chain):
                 local_chain = peer_chain
         except Exception as e:
-            raise Exception(e)
+            pass
     if save:
         local_chain.self_save()
     return local_chain

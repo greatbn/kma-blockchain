@@ -116,10 +116,10 @@ if __name__ == '__main__':
     ## before start this node have to register it to API node
     ## and sync overall blockchain database 
     ## then after all, this node can join blockchain network
-    if os.getenv('IS_API_NODE', False):
+    if not bool(os.getenv('IS_API_NODE', False)):
         if not nodes.register_self_node(int(args.port)):
             sys.exit(1)
-    sync.sync_overall
+    sync.sync_overall(save=True)
     # sync interval
     sched.add_job(
         sync.sync_transactions,
@@ -136,6 +136,7 @@ if __name__ == '__main__':
     sched.add_job(
         sync.sync_overall,
         'interval',
+        args=[True],
         seconds=30,
         id='sync-peer'
     )
