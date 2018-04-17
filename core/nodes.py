@@ -1,3 +1,5 @@
+from config import API_NODE
+
 def get_list_node(mongo_conn):
     """
     get from database and parse to a list of node
@@ -9,9 +11,10 @@ def get_list_node(mongo_conn):
     """
     _nodes = mongo_conn.query_confirm_node()
     nodes = []
+    nodes.append(API_NODE)
     for node in _nodes:
         n = "http://{}:{}".format(
-            node['node_addresds'],
+            node['node_address'],
             node['node_port'])
         nodes.append(n)
     return nodes
