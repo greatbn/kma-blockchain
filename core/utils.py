@@ -131,5 +131,4 @@ class MongoDBWrapper(object):
 
     def flush_data(self):
         self.tx.drop()
-        self.node.drop()
         self.mining.drop()
