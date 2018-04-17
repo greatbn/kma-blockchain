@@ -29,7 +29,7 @@ def sync_transactions():
                     del tx['_id']
                     mongo_conn.new_pending_transaction(tx)
                     pending_txid.append(tx['txid'])
-        except requests.exceptions.ConnectionError:
+        except Exception:
             # print "Seed node %s not connected" % node
             continue
     return True
@@ -37,10 +37,10 @@ def sync_transactions():
 
 def sync_node():
     # get local node
-    nodes = mongo_conn.query_confirm_node()
-    node_id = []
-    for node in nodes:
-        node_id.append(node['uuid'])
+    local_nodes = mongo_conn.query_confirm_node()
+    node_ids = []
+    for node in local_nodes:
+        node_ids.append(node['uuid'])
     # check seed nodes if not exist append to list and write to local
     NODES = nodes.get_list_node(mongo_conn)
     for node in NODES:
@@ -49,10 +49,10 @@ def sync_node():
             r = requests.get(endpoint)
             data = r.json()['nodes']
             for n in data:
-                if n['uuid'] not in node_id:
+                if n['uuid'] not in node_ids:
                     del n['_id']
                     mongo_conn.register_node(n)
-                    node_id.append(n['uuid'])
+                    node_ids.append(n['uuid'])
         except requests.exceptions.ConnectionError:
             print "Node %s is not connected" % node
     return True
