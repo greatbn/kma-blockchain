@@ -144,8 +144,8 @@ if __name__ == '__main__':
         seconds=30,
         id='mining-listener'
     )
-    sched.start()
     mongo_conn.flush_data()
+    sched.start()
     app.run(debug=False,
             host='0.0.0.0',
             port=int(args.port))
