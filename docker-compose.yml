@@ -4,6 +4,8 @@ services:
     build: .
     ports:
       - 5000:5000
+    volumes:
+      - /chaindata/:/app/chaindata
     environment:
       MONGODB_HOST: mongodb
 
