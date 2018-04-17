@@ -1,9 +1,10 @@
 version: "2"
 services:
   node:
-    build: .
+    image: kmablockchain/core 
     ports:
       - 5000:5000
+    network_mode: host
     volumes:
       - /chaindata/:/app/chaindata
     environment:
