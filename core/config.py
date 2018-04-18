@@ -15,6 +15,7 @@ ELASTIC_HOSTS = ["elastic"]
 ELASTIC_INDEX = "blockchain"
 
 API_NODE = os.getenv("API_NODE", "http://10.5.9.110:5000")
+ENV = os.getenv('ENV', 'develop')
 
 BLOCK_VAR_CONVERSIONS = {
     'txid': str,

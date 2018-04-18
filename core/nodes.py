@@ -1,4 +1,4 @@
-from config import API_NODE
+from config import API_NODE, ENV
 import socket
 import requests
 
@@ -13,7 +13,8 @@ def get_list_node(mongo_conn):
     """
     _nodes = mongo_conn.query_confirm_node()
     nodes = []
-    nodes.append(API_NODE)
+    if ENV == 'production':
+        nodes.append(API_NODE)
     for node in _nodes:
         n = "http://{}:{}".format(
             node['node_address'],
