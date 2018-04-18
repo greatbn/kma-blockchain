@@ -60,7 +60,7 @@ def sync_node():
 def sync_local():
     local_chain = Chain([])
     if os.path.exists(CHAINDATA_DIR):
-        for filepath in glob.glob(os.path.join(CHAINDATA_DIR, '*.json'))[::-1]:
+        for filepath in sorted(glob.glob(os.path.join(CHAINDATA_DIR, '*.json'))):
             with open(filepath, 'r') as block_file:
                 try:
                     block_info = json.load(block_file)
