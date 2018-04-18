@@ -44,6 +44,10 @@ def nodes():
                                nodes=nodes['nodes'],
                                API_NODE=API_NODE)
 
+@app.route("/explore")
+def expore():
+    blockchain = requests.get(API_NODE + "/blockchain").json()
+    return render_template("explore.html", blockchain=blockchain)
 
 if __name__ == "__main__":
     

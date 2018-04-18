@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>TX ID</th>
+            <th>Index</th>
+            <th>Hash</th>
+            <th>Nonce</th>
+            <th>Prev_Hash</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in blockchain %}
+        <tr>
+            <td>{{ b['timestamp'] }}</td>
+            <td>{{ b['txid'] }}</td>
+            <td>{{ b['index'] }}</td>
+            <td>{{ b['hash'] }}</td>
+            <td>{{ b['nonce'] }}</td>
+            <td>{{ b['prev_hash'] }}</td>
+            <td>{{ b['data'] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
