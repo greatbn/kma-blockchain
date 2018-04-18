@@ -12,10 +12,10 @@ mongo_conn = utils.MongoDBWrapper()
 def sync_transactions():
     # print "Start syncing"
     # get local pending transactions
-    pending_transactions = mongo_conn.query_pending_transactions()
-    pending_txid = []
-    for tx in pending_transactions:
-        pending_txid.append(tx['txid'])
+    # pending_transactions = mongo_conn.query_pending_transactions()
+    # pending_txid = []
+    # for tx in pending_transactions:
+        # pending_txid.append(tx['txid'])
     # check other seed node pending transaction if not exist write to local
     NODES = nodes.get_list_node(mongo_conn)
     for node in NODES:
@@ -24,11 +24,8 @@ def sync_transactions():
             r = requests.get(endpoint)
             data = r.json()['pending']
             for tx in data:
-                if tx['txid'] not in pending_txid:
-                    # print "New pending transaction"
-                    del tx['_id']
+                if not mongo_conn.find_transaction_local(tx['txid']):
                     mongo_conn.new_pending_transaction(tx)
-                    pending_txid.append(tx['txid'])
         except Exception:
             # print "Seed node %s not connected" % node
             continue
