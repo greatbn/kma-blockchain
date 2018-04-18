@@ -119,12 +119,13 @@ if __name__ == '__main__':
     if not bool(os.getenv('IS_API_NODE', False)):
         if not nodes.register_self_node(int(args.port)):
             sys.exit(1)
-    sync.sync_overall(save=True)
+    if os.getenv('ENV') == 'production':
+        sync.sync_overall(save=True)
     # sync interval
     sched.add_job(
         sync.sync_transactions,
         'interval',
-        seconds=10,
+        seconds=60,
         id='sync-transactions'
     )
     sched.add_job(
