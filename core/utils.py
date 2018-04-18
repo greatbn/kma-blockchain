@@ -74,7 +74,7 @@ class MongoDBWrapper(object):
     def query_pending_transactions(self):
         # query all transaction in database
         try:
-            data = self.tx.find({})
+            data = self.tx.find({'state': {'$ne': 'mined'}})
             return json.loads(json_util.dumps(list(data)))
         except Exception as e:
             raise Exception("Cannot get pending transactions")
@@ -82,13 +82,31 @@ class MongoDBWrapper(object):
     def query_a_pending_transaction(self):
         # query one pending transaction
         try:
-            data = self.tx.find_one()
+            data = self.tx.find_one({'state': {'$ne': 'mined'}})
             if data:
                 return json.loads(json_util.dumps(dict(data)))
             else:
                 return False
         except Exception as e:
             raise Exception("Cannot get a pending transaction %s" % e)
+
+    def find_transaction_local(self, txid):
+        try:
+            data = self.tx.find_one({'txid': txid})
+            return data
+        except Exception as e:
+            raise Exception(e)
+        
+    def update_state_pending_tx(self, txid, state):
+        try:
+            self.tx.update({
+                'txid': txid
+            }, {'$set': {
+                'state': state
+            }})
+            return True
+        except Exception as e:
+            raise Exception(e)
 
     def add_mining_tx(self, txid):
         # add mining txid
