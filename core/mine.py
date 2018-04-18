@@ -14,11 +14,13 @@ logging.getLogger('apscheduler').setLevel(logging.INFO)
 
 mongo_conn = utils.MongoDBWrapper()
 
-def validate_possible_block(sche, mongo_conn, possible_block, txid):
+def validate_possible_block(sche, mongo_conn, possible_block):
     """
     validate new possible block 
     if True, save to local
     """
+    print "Got new block was broadcast"
+    print possible_block.to_dict
     possible_block = Block(possible_block)
     if possible_block.is_valid():
         possible_block.self_save()
@@ -29,7 +31,7 @@ def validate_possible_block(sche, mongo_conn, possible_block, txid):
         except apscheduler.jobstores.base.JobLookupError:
             print "No mining job exist"
         # remove in pending transactions
-        mongo_conn.remove_pending_transaction(possible_block['txid'])
+        mongo_conn.update_state_pending_tx(possible_block.txid, state='mined')
         return True
     return False
 
@@ -54,7 +56,7 @@ def mine_block_listener(event):
             new_block.self_save()
             broadcast_mined_block(new_block)
             txid = new_block.txid
-            mongo_conn.remove_pending_transaction(txid)
+            mongo_conn.update_state_pending_tx(txid, state='mined')
             mongo_conn.remove_mining_tx(txid)
         else:
             pass
