@@ -12,17 +12,41 @@ class Chain(object):
         2, each block's prev_hash is the hash of the previous block
         3, The block's hash is valid for the number of zeros
         """
-        for index, cur_block in enumerate(self.blocks[1:]):
-            prev_block = self.blocks[index]
-            if prev_block.index + 1 != cur_block.index:
-                print('Index Error')
+        # n_blocks = self.blocks[1:]
+        # for index, cur_block in enumerate(self.blocks[1:][::-1]):
+        #     prev_block = self.blocks[::-1][index]
+        #     print "======"
+        #     print prev_block.to_dict()
+        #     print "++++++"
+        #     print cur_block.to_dict()
+        #     # if prev_block.index + 1 != cur_block.index:
+        #         # print('Index Error')
+        #         # return False
+        #     if not cur_block.is_valid():
+        #         print('Block invalid')
+        #         return False
+        #     if prev_block.hash != cur_block.prev_hash:
+        #         print('Hash error')
+        #         return False
+        self.blocks = self.blocks[::-1]
+        last_block = self.blocks[0]
+        current_index = 1
+        while current_index < len(self.blocks):
+            print "--------"
+            print last_block.to_dict()
+            print "========"
+            block = self.blocks[current_index]
+            print block.to_dict()
+            if block.hash != last_block.prev_hash:
+                print "Hash error"
                 return False
-            if not cur_block.is_valid():
-                print('Block invalid')
+            if not block.is_valid():
+                print "Block invalid"
                 return False
-            if prev_block.hash != cur_block.prev_hash:
-                print('Hash error')
-                return False
+            
+            last_block = block
+            current_index += 1
+        print "Chain valid"
         return True
 
     def self_save(self):
