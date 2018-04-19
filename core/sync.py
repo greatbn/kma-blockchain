@@ -61,7 +61,6 @@ def sync_local():
             with open(filepath, 'r') as block_file:
                 try:
                     block_info = json.load(block_file)
-                    print block_info
                 except:
                     raise Exception("block error")
                 local_block = Block(block_info)
