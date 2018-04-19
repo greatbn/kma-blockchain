@@ -117,9 +117,12 @@ if __name__ == '__main__':
     ## and sync overall blockchain database 
     ## then after all, this node can join blockchain network
     if not bool(os.getenv('IS_API_NODE', False)):
+        print "Register this node to network"
         if not nodes.register_self_node(int(args.port)):
             sys.exit(1)
+
     if os.getenv('ENV') == 'production':
+        print "Syncing Overall"
         sync.sync_overall(save=True)
     # sync interval
     sched.add_job(
