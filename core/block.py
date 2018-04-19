@@ -13,14 +13,6 @@ class Block(object):
                 setattr(self, key, BLOCK_VAR_CONVERSIONS[key](value))
             else:
                 setattr(self, key, value)
-        # print dictionary
-        # self.index = int(dictionary['index'])
-        # self.timestamp = str(dictionary['timestamp'])
-        # self.prev_hash = str(dictionary['prev_hash'])
-        # self.nonce = int(dictionary['nonce'])
-        # self.txid = str(dictionary['txid'])
-        # self.data = dictionary['data']
-        # self.hash = str(dictionary['hash'])
 
     def header_string(self):
         """
@@ -29,8 +21,7 @@ class Block(object):
         return str(self.index) + self.prev_hash + str(self.data) + str(self.timestamp) + str(self.nonce) + str(self.txid)
     
     def update_self_hash(self):
-        sha = hashlib.sha256()
-        sha.update(self.header_string())
+        sha = hashlib.sha256(self.header_string())
         new_hash = sha.hexdigest()
         self.hash = new_hash
         return new_hash

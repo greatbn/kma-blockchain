@@ -56,8 +56,6 @@ def mine_block_listener(event):
             new_block.self_save()
             broadcast_mined_block(new_block)
             txid = new_block.txid
-            mongo_conn.update_state_pending_tx(txid, state='mined')
-            mongo_conn.remove_mining_tx(txid)
         else:
             pass
 
@@ -110,10 +108,11 @@ def proof_of_work(blockchain, data=None):
             new_block.nonce += 1
             new_block.update_self_hash()
             # print new_block.to_dict()
-            if new_block.is_valid():
+        if new_block.is_valid():
         # print new_block
-                print "New block was mined"
-                print new_block.to_dict()
-                return new_block
+            print "New block was mined"
+            mongo_conn.update_state_pending_tx(txid, state='mined')
+            mongo_conn.remove_mining_tx(txid)
+            return new_block
     print "No data input"
 

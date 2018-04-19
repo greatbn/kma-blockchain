@@ -23,9 +23,10 @@ BLOCK_VAR_CONVERSIONS = {
     'nonce': int,
     'hash': str,
     'prev_hash': str,
-    'timestamp': str
+    'timestamp': str,
+    'data': str
 }
 CHAINDATA_DIR = "./chaindata/"
 
-NUM_ZEROS = 6
+NUM_ZEROS = 4
 STANDARD_ROUNDS = 100000
