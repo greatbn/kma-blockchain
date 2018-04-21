@@ -24,11 +24,13 @@ def sync_transactions():
             r = requests.get(endpoint)
             data = r.json()['pending']
             for tx in data:
-                if not mongo_conn.find_transaction_local(tx['txid']):
-                    mongo_conn.new_pending_transaction(tx)
-        except Exception:
+                if not mongo_conn.find_transaction_local(txid=tx['txid']):
+                    mongo_conn.new_pending_transaction(txid=tx['txid'],
+                                                       timestamp=tx['timestamp'],
+                                                       data=tx['data'])
+        except Exception as e:
             # print "Seed node %s not connected" % node
-            continue
+            print e
     return True
             
 

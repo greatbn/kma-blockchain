@@ -65,10 +65,13 @@ def mined():
     this endpoint to other node broadcast result
     """
     possible_block_dict = request.get_json()
-    sched.add_job(mine.validate_possible_block,
-                  args=[sched, mongo_conn, possible_block_dict],
-                  id='validate_possible_block')
-    return jsonify(received=True)
+    print possible_block_dict
+    if mine.validate_possible_block(sched,
+                                    mongo_conn,
+                                    possible_block_dict):
+        return jsonify(received=True), 201
+    else:
+        return jsonify(message='The block is not valid')
 
 
 @app.route('/node-register', methods=['POST'])

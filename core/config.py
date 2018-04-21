@@ -28,5 +28,5 @@ BLOCK_VAR_CONVERSIONS = {
 }
 CHAINDATA_DIR = "./chaindata/"
 
-NUM_ZEROS = 4
+NUM_ZEROS = int(os.getenv('NUM_ZEROS', 4))
 STANDARD_ROUNDS = 100000

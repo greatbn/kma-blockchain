@@ -17,16 +17,25 @@ class MongoDBWrapper(object):
         self.mining = db[MONGODB_COLLECTIONS['mining']]
     
 
-    def new_pending_transaction(self, data):
+    def new_pending_transaction(self, data, txid=None, timestamp=None):
         # push new transaction to mongodb
         # return transaction id
         try:
-            if 'txid' not in data:
+            doc = {}
+            if not txid:
                 txid = uuid.uuid4()
-                data['txid'] = str(txid)
-            timestamp = datetime.datetime.utcnow().strftime("%Y/%m/%d-%H:%M:%S:%f")
-            data['timestamp'] = timestamp
-            self.tx.save(data)
+                
+            # if '_id' in data:
+                # del data['_id']
+            if not timestamp:
+                timestamp = datetime.datetime.utcnow().strftime("%Y/%m/%d-%H:%M:%S:%f")
+            # delete txid timestamp in data
+            # del data['txid']
+            doc = {'data': str(data),
+                   'state': 'pending',
+                   'txid': str(txid),
+                   'timestamp': timestamp}
+            self.tx.save(doc)
             return txid
         except Exception as e:
             raise Exception("Cannot add new transaction %s " % e)
@@ -74,15 +83,17 @@ class MongoDBWrapper(object):
     def query_pending_transactions(self):
         # query all transaction in database
         try:
-            data = self.tx.find({'state': {'$ne': 'mined'}})
-            return json.loads(json_util.dumps(list(data)))
+            pending_tx = []
+            data = self.tx.find({'state': {'$eq': 'pending'}})
+            data = json.loads(json_util.dumps(list(data)))
+            return data
         except Exception as e:
             raise Exception("Cannot get pending transactions")
     
     def query_a_pending_transaction(self):
         # query one pending transaction
         try:
-            data = self.tx.find_one({'state': {'$ne': 'mined'}})
+            data = self.tx.find_one({'state': {'$eq': 'pending'}})
             if data:
                 return json.loads(json_util.dumps(dict(data)))
             else:
