@@ -44,7 +44,7 @@ class Block(object):
         info['timestamp'] = str(self.timestamp)
         info['prev_hash'] = str(self.prev_hash)
         info['hash'] = str(self.hash)
-        info['data'] = self.data
+        info['data'] = str(self.data)
         info['nonce'] = str(self.nonce)
         info['txid'] = str(self.txid)
         return info

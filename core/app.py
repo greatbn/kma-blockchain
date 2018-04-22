@@ -127,7 +127,7 @@ if __name__ == '__main__':
     if os.getenv('ENV') == 'production':
         print "Syncing Overall"
         sync.sync_overall(save=True)
-    # sync interval
+    ## sync interval
     sched.add_job(
         sync.sync_transactions,
         'interval',
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     sched.add_job(
         sync.sync_node,
         'interval',
-        seconds=10,
+        seconds=300,
         id='sync-nodes'
     )
     sched.add_job(

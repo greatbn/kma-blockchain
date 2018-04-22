@@ -20,7 +20,7 @@ def validate_possible_block(sche, mongo_conn, possible_block):
     if True, save to local
     """
     print "Got new block was broadcast"
-    print possible_block.to_dict
+    print possible_block
     possible_block = Block(possible_block)
     if possible_block.is_valid():
         possible_block.self_save()
@@ -32,11 +32,13 @@ def validate_possible_block(sche, mongo_conn, possible_block):
             print "No mining job exist"
         # remove in pending transactions
         mongo_conn.update_state_pending_tx(possible_block.txid, state='mined')
+        mongo_conn.remove_mining_tx(txid=possible_block.txid)
         return True
     return False
 
 def broadcast_mined_block(new_block):
-    new_block = new_block.__dict__
+    new_block = new_block.to_dict()
+    print new_block
     NODES = nodes.get_list_node(mongo_conn)
     for peer in NODES:
         endpoint = peer + "/mined"
@@ -49,10 +51,9 @@ def broadcast_mined_block(new_block):
 
 def mine_block_listener(event):
     if event.job_id == 'mining':
-        
         new_block = event.retval
-
         if new_block:
+            print "Find a new block"
             new_block.self_save()
             broadcast_mined_block(new_block)
             txid = new_block.txid
