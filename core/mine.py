@@ -25,9 +25,8 @@ def validate_possible_block(sche, mongo_conn, possible_block):
     if possible_block.is_valid():
         possible_block.self_save()
         try:
-            if mongo_conn.query_mining_tx(possible_block.txid):
-                sche.remove_job('mining')
-                print "Removed mining job"
+            sche.remove_job('mining')
+            print "Removed mining job"
         except apscheduler.jobstores.base.JobLookupError:
             print "No mining job exist"
         # remove in pending transactions
