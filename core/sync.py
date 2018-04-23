@@ -21,7 +21,7 @@ def sync_transactions():
     for node in NODES:
         endpoint = "%s%s" % (node, "/pending-transactions")
         try:
-            r = requests.get(endpoint)
+            r = requests.get(endpoint, timeout=5)
             data = r.json()['pending']
             for tx in data:
                 if not mongo_conn.find_transaction_local(txid=tx['txid']):
@@ -45,7 +45,7 @@ def sync_node():
     for node in NODES:
         endpoint = "%s%s" % (node, "/confirm-nodes")
         try:
-            r = requests.get(endpoint)
+            r = requests.get(endpoint, timeout=5)
             data = r.json()['nodes']
             for n in data:
                 if n['uuid'] not in node_ids:
@@ -75,7 +75,7 @@ def sync_overall(save=False):
     for peer in NODES:
         endpoint = peer + '/blockchain'
         try:
-            r = requests.get(endpoint)
+            r = requests.get(endpoint, timeout=5)
             chain_data = r.json()
             peer_blocks = [Block(block_dict) for block_dict in chain_data]
             peer_chain = Chain(peer_blocks)

@@ -42,7 +42,7 @@ def broadcast_mined_block(new_block):
     for peer in NODES:
         endpoint = peer + "/mined"
         try:
-            r = requests.post(endpoint, json=new_block)
+            r = requests.post(endpoint, json=new_block, timeout=5)
         except Exception:
             print "Peer %s is not online now" % peer
             continue
