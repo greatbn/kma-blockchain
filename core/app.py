@@ -40,12 +40,15 @@ def new():
     # if doc_hash already in blockchain database
     # return Document was exist and txid
     # push transaction to mongodb
-    txid = mongo_conn.new_pending_transaction(data)
+    local_chain = sync.sync_overall()
+    if not local_chain.find_block_by_data_attr(key='doc_hash', value=data['doc_hash']):
+        txid = mongo_conn.new_pending_transaction(data)
     
-    return jsonify({'message': 'New transaction was submitted'\
-                               ' to blockchain database',
-                    'transaction_id': txid}), 201
-
+        return jsonify({'message': 'New transaction was submitted'\
+                                   ' to blockchain database',
+                                   ' transaction_id': txid}), 201
+    else:
+        return jsonify({'message': 'This document is already on blockchain'}), 403
 
 #@app.route('upload', methods=['POST'])
 
@@ -65,7 +68,6 @@ def mined():
     this endpoint to other node broadcast result
     """
     possible_block_dict = request.get_json()
-    print possible_block_dict
     if mine.validate_possible_block(sched,
                                     mongo_conn,
                                     possible_block_dict):
