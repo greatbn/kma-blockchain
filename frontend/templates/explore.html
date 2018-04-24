@@ -1,29 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Timestamp</th>
-            <th>TX ID</th>
-            <th>Index</th>
-            <th>Hash</th>
-            <th>Nonce</th>
-            <th>Prev_Hash</th>
-            <th>Data</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for b in blockchain %}
-        <tr>
-            <td>{{ b['timestamp'] }}</td>
-            <td>{{ b['txid'] }}</td>
-            <td>{{ b['index'] }}</td>
-            <td>{{ b['hash'] }}</td>
-            <td>{{ b['nonce'] }}</td>
-            <td>{{ b['prev_hash'] }}</td>
-            <td>{{ b['data'] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="100">Timestamp</th>
+                    <th width="220">TX ID</th>
+                    <th width="20">Index</th>
+                    <th width="200">Hash</th>
+                    <th width="50">Nonce</th>
+                    <th width="200">Prev_Hash</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for b in blockchain %}
+                <tr>
+                    <td width="200">{{ b['timestamp'] }}</td>
+                    <td width="220">{{ b['txid'] }}</td>
+                    <td width="20">{{ b['index'] }}</td>
+                    <td width="200" style="word-break: break-all">{{ b['hash'] }}</td>
+                    <td width="50">{{ b['nonce'] }}</td>
+                    <td width="200" style="word-break: break-all">{{ b['prev_hash'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>    
+    </div>
+</div>
+
+
 {% endblock %}

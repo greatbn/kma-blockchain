@@ -3,60 +3,60 @@
 {% if nodes|length == 0 %}
 <div class="alert alert-warning" role="alert">Blockchain network has only one node</div>
 {% else %}
-
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Node UUID</th>
-            <th>Node Address</th>
-            <th>Node Port</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for node in nodes %}
-        <tr>
-            <td>{{ node['uuid'] }}</td>
-            <td>{{ node['node_address'] }}</td>
-            <td>{{ node['node_port'] }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% endif %}
-<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addNode">Add node</button>
-
-<div id="addNode" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-  
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Add Node to Blockchain Network</h4>
-        </div>
-        <div class="modal-body" style="padding:40px 50px;">
-            <form role="form" >
-                <div class="form-group" id="addnode">
-                    <label for="nodeAddress"><span class="glyphicon glyphicon-tasks"></span> Node Address</label>
-                    <input name="nodeAddress" type="text" class="form-control" id="nodeAddress" placeholder="Enter node address">
-                    <label for="nodePort"><span class="glyphicon glyphicon-tasks"></span> Node Port</label>
-                    <input name="nodePort" type="text" class="form-control" id="nodePort" placeholder="Enter node port">
-
-                    
-                </div>
-                    
-            </form>
-            <button onclick="addNode()" class="btn btn-success btn-block" ><span class="glyphicon glyphicon-off"></span> Add</button>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+<div class="container-fluid">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Node UUID</th>
+                <th>Node Address</th>
+                <th>Node Port</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for node in nodes %}
+            <tr>
+                <td>{{ node['uuid'] }}</td>
+                <td>{{ node['node_address'] }}</td>
+                <td>{{ node['node_port'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% endif %}
+    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#addNode">Add node</button>
+    
+    <div id="addNode" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+      
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Node to Blockchain Network</h4>
+            </div>
+            <div class="modal-body" style="padding:40px 50px;">
+                <form role="form" >
+                    <div class="form-group" id="addnode">
+                        <label for="nodeAddress"><span class="glyphicon glyphicon-tasks"></span> Node Address</label>
+                        <input name="nodeAddress" type="text" class="form-control" id="nodeAddress" placeholder="Enter node address">
+                        <label for="nodePort"><span class="glyphicon glyphicon-tasks"></span> Node Port</label>
+                        <input name="nodePort" type="text" class="form-control" id="nodePort" placeholder="Enter node port">
+    
+                        
+                    </div>
+                        
+                </form>
+                <button onclick="addNode()" class="btn btn-success btn-block" ><span class="glyphicon glyphicon-off"></span> Add</button>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+      
         </div>
       </div>
-  
-    </div>
-  </div>
-
+</div>
   <script>
       function addNode(){
           var nodeAddress = $("#nodeAddress").val();
