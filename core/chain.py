@@ -64,3 +64,9 @@ class Chain(object):
             if data[key] == value:
                 return b
         return False
+    
+    def find_block_by_txid(self, txid):
+        for b in self.blocks:
+            if b.txid == txid:
+                return b
+        return False
