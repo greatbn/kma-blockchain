@@ -7,7 +7,10 @@ import glob
 from chain import Chain
 from block import Block
 import nodes
+from elastic import ElasticWrapper
+
 mongo_conn = utils.MongoDBWrapper()
+es = ElasticWrapper()
 
 def sync_transactions():
     # print "Start syncing"
@@ -56,7 +59,7 @@ def sync_node():
             print "Node %s is not connected" % node
     return True
 
-def sync_local():
+def sync_local(sync_es=False):
     local_chain = Chain([])
     if os.path.exists(CHAINDATA_DIR):
         for filepath in sorted(glob.glob(os.path.join(CHAINDATA_DIR, '*.json'))):
@@ -65,12 +68,14 @@ def sync_local():
                     block_info = json.load(block_file)
                 except:
                     raise Exception("block error")
+                if sync_es:
+                    es.insert_document(block_info)
                 local_block = Block(block_info)
                 local_chain.add_block(local_block)
     return local_chain
 
-def sync_overall(save=False):
-    local_chain = sync_local()
+def sync_overall(save=False, sync_es=False):
+    local_chain = sync_local(sync_es)
     NODES = nodes.get_list_node(mongo_conn)
     for peer in NODES:
         endpoint = peer + '/blockchain'
@@ -81,6 +86,19 @@ def sync_overall(save=False):
             peer_chain = Chain(peer_blocks)
             # check valid , if valid and longer, sync local
             if peer_chain.is_valid() and len(peer_chain) > len(local_chain):
+                ## insert new block to elasticsearch
+                ## find a new block
+                ## m is length of local_chains 
+                ## n la so block moi can them 
+                m = len(local_chain)
+                n = len(peer_chain) - len(local_chain)
+
+                peer_blocks = peer_chain.blocks
+                local_blocks = local_chain.blocks
+                for i in range(0, n):
+                    block = local_blocks[i + m]
+                    block_dict = block.dict()
+                    es.insert_document(block_dict)
                 local_chain = peer_chain
         except Exception as e:
             pass

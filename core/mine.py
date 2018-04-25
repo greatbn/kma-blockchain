@@ -8,11 +8,14 @@ import sync
 from apscheduler.events import EVENT_JOB_EXECUTED
 import nodes
 import logging
+from elastic import ElasticWrapper
 
 logging.basicConfig()
 logging.getLogger('apscheduler').setLevel(logging.INFO)
 
 mongo_conn = utils.MongoDBWrapper()
+es = ElasticWrapper()
+
 
 def validate_possible_block(sche, mongo_conn, possible_block):
     """
@@ -24,6 +27,7 @@ def validate_possible_block(sche, mongo_conn, possible_block):
     possible_block = Block(possible_block)
     if possible_block.is_valid():
         possible_block.self_save()
+        es.insert_document(possible_block.to_dict())
         try:
             sche.remove_job('mining')
             print "Removed mining job"
@@ -84,6 +88,8 @@ def mine_for_block(sched, mongo_conn):
             print "No pending transaction"
     except Exception as e:
         ## query pending transaction fail or not have any pending transaction
+        # if minging error, remove mining job
+        mongo_conn.remove_mining_tx(txid=pending_tx)
         raise Exception(e)
 
 def proof_of_work(blockchain, data=None):

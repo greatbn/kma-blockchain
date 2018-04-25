@@ -9,10 +9,12 @@ from flask_cors import CORS
 import nodes
 import sys
 import os
+from elastic import ElasticWrapper
 
 app = Flask(__name__)
 CORS(app, resources={r"/*/*": {"origin": "*"}})
 mongo_conn = utils.MongoDBWrapper()
+es = ElasticWrapper()
 sched = BackgroundScheduler(standalone=True)
 
 import logging
@@ -40,7 +42,7 @@ def new():
     # if doc_hash already in blockchain database
     # return Document was exist and txid
     # push transaction to mongodb
-    local_chain = sync.sync_overall()
+    local_chain = sync.sync_local()
     if not local_chain.find_block_by_data_attr(key='doc_hash', value=data['doc_hash']):
         txid = mongo_conn.new_pending_transaction(data)
     
@@ -122,6 +124,12 @@ def transaction(txid):
         return jsonify(message='Block not found'), 404
 
 
+# @app.route('/search')
+# def search():
+    
+
+
+
 if __name__ == '__main__':
     #args!
     parser = argparse.ArgumentParser(description='KMA Blockchain Node')
@@ -139,7 +147,8 @@ if __name__ == '__main__':
 
     if os.getenv('ENV') == 'production':
         print "Syncing Overall"
-        sync.sync_overall(save=True)
+        es.flush_document()
+        sync.sync_overall(save=True, sync_es=True)
     ## sync interval
     sched.add_job(
         sync.sync_transactions,

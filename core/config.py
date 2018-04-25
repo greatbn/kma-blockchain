@@ -11,7 +11,7 @@ MONGODB_COLLECTIONS = {
     'mining': 'mining'
 }
 
-ELASTIC_HOSTS = ["elastic"]
+ELASTIC_HOST = os.getenv('ELASTIC_HOST', 'http://localhost:9200')
 ELASTIC_INDEX = "blockchain"
 
 API_NODE = os.getenv("API_NODE", "http://10.5.9.110:5000")
