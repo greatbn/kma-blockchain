@@ -90,13 +90,12 @@ def proof_of_work(blockchain, data=None):
     if data:
         print "Starting Proof of Work"
         prev_block = blockchain.most_recent_block()
-        txid = data['txid']
+        
         nonce = 0
         # build block
-        del data['txid']
-        del data['_id']
+        txid = data['txid']
         timestamp = data['timestamp']
-        del data['timestamp']
+        data = data['data']
         new_block = block_utils.create_new_block_from_prev(
             prev_block=prev_block,
             txid=txid,
