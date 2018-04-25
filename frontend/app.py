@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
 import requests
 import ast
+import utils
 
 from flask_bootstrap import Bootstrap
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 Bootstrap(app)
 
 API_NODE = "http://10.5.9.110:5000"
+SEARCH_API = "http://10.5.9.100:9200"
 
 @app.route("/")
 def index():
@@ -64,6 +66,25 @@ def details_tx():
         return render_template("details-tx.html", tx=tx)
     else:
         return redirect("/explore")
+
+
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    if request.method == 'GET':
+        return render_template("search.html")
+
+    elif request.method == 'POST':
+        keyword = request.form['keyword']
+        ## TODO
+        ## Call to api to search document
+        ## result = list of block
+        result = utils.search_document(SEARCH_API, keyword)
+        message = ""
+        if len(result) > 0:
+            return render_template("search.html", result=result)
+        elif len(result) == 0:
+            message = "No document with keyword {1} exist".format(keyword)
+            return render_template("search.html", message=message)
 
 
 if __name__ == "__main__":
