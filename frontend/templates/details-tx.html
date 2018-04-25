@@ -8,6 +8,10 @@
                 <td align="left">{{ tx['txid'] }}</td>
             </tr>
             <tr>
+                <td>Nonce</td>
+                <td align="left">{{ tx['nonce'] }}</td>
+            </tr>
+            <tr>
                 <td>Status </td>
                 <td align="left"> Success </td>
             </tr>
@@ -15,6 +19,14 @@
                 <td>Timestamp</td>
                 <td align="left"> {{ tx['timestamp'] }} </td>
             </tr>
+            <tr>
+                <td>Hash</td>
+                <td align="left"> {{ tx['hash'] }} </td>
+            </tr>    
+            <tr>
+                <td>Previous Hash</td>
+                <td align="left"> {{ tx['prev_hash'] }} </td>
+            </tr>       
             <tr>
                 <td>Doc hash</td>
                 <td align="left"> {{ tx['data']['doc_hash'] }} </td>                
