@@ -111,6 +111,17 @@ def blockchain():
     json_blocks = local_chain.block_list_to_dict()
     return jsonify(json_blocks)
 
+
+@app.route('/transaction/<string:txid>', methods=['GET'])
+def transaction(txid):
+    local_chain = sync.sync_local()
+    block = local_chain.find_block_by_txid(txid)
+    if block:
+        return jsonify(block.to_dict()), 200
+    else:
+        return jsonify(message='Block not found'), 404
+
+
 if __name__ == '__main__':
     #args!
     parser = argparse.ArgumentParser(description='KMA Blockchain Node')
