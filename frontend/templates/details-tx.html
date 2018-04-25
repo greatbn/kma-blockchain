@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid">
+    <div class="table-responsive">
+        <table  class="table table-bordered">
+            <tr>
+                <td>Tx ID</td>
+                <td align="left">{{ tx['txid'] }}</td>
+            </tr>
+            <tr>
+                <td>Status </td>
+                <td align="left"> Success </td>
+            </tr>
+            <tr>
+                <td>Timestamp</td>
+                <td align="left"> {{ tx['timestamp'] }} </td>
+            </tr>
+            <tr>
+                <td>Doc hash</td>
+                <td align="left"> {{ tx['data']['doc_hash'] }} </td>                
+            </tr>
+            <tr>
+                <td>Title</td>
+                <td align="left"> {{ tx['data']['title'] }} </td>                
+            </tr>
+            <tr>
+                <td>Author</td>
+                <td align="left"> {{ tx['data']['author'] }} </td>                
+            </tr>
+            <tr>
+                <td>S3 URL</td>
+                <td align="left"> {{ tx['data']['s3_url'] }} </td>                
+            </tr>            
+        </table>
+    </div>
+</div>
+{% endblock %}

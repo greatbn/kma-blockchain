@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 import requests
+import ast
 
 from flask_bootstrap import Bootstrap
 
@@ -46,8 +47,24 @@ def nodes():
 
 @app.route("/explore")
 def expore():
-    blockchain = requests.get(API_NODE + "/blockchain").json()
+    blockchain = requests.get(API_NODE + "/blockchain").json()[::-1]
     return render_template("explore.html", blockchain=blockchain)
+
+
+@app.route("/details-tx", methods=['GET'])
+def details_tx():
+    # get txid
+    
+    txid = request.args.get('txid')
+    tx = requests.get(API_NODE + '/transaction/' + txid)
+    if tx.status_code == 200:
+        tx = tx.json()
+        print tx
+        tx['data'] = ast.literal_eval(tx['data'])
+        return render_template("details-tx.html", tx=tx)
+    else:
+        return redirect("/explore")
+
 
 if __name__ == "__main__":
     
