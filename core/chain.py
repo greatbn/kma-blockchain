@@ -1,4 +1,5 @@
 from block import Block
+import ast
 
 class Chain(object):
 
@@ -55,4 +56,11 @@ class Chain(object):
                 return b
         return False
 
-    # def find_block_by_title(self,):
+    def find_block_by_data_attr(self, key, value):
+        for b in self.blocks:
+            if b.index == 0:
+                continue
+            data = ast.literal_eval(b.data)
+            if data[key] == value:
+                return b
+        return False
