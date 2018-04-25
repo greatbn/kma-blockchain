@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-{% if pending_transactions|length == 0 %}
-<div class="alert alert-warning" role="alert">Blockchain network has no pending transaction</div>
-{% else %}
-
 <div class="container-fluid">
+    {% if pending_transactions|length == 0 %}
+    <div class="alert alert-warning" role="alert" style="display:inline-block;">Blockchain network has no pending transaction</div>
+    {% else %}
     <table class="table table-bordered">
         <thead>
             <tr>
