@@ -9,7 +9,7 @@ app = Flask(__name__)
 Bootstrap(app)
 
 API_NODE = "http://10.5.9.110:5000"
-SEARCH_API = "http://10.5.9.100:9200"
+SEARCH_API = "http://10.5.9.110:9200"
 
 @app.route("/")
 def index():
@@ -74,7 +74,8 @@ def search():
         return render_template("search.html")
 
     elif request.method == 'POST':
-        keyword = request.form['keyword']
+        # import ipdb;ipdb.set_trace()
+        keyword = request.form.get('keyword')
         ## TODO
         ## Call to api to search document
         ## result = list of block
@@ -83,7 +84,7 @@ def search():
         if len(result) > 0:
             return render_template("search.html", result=result)
         elif len(result) == 0:
-            message = "No document with keyword {1} exist".format(keyword)
+            message = "No document with keyword {0} exist".format(keyword)
             return render_template("search.html", message=message)
 
 
