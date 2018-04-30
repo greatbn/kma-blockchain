@@ -1,6 +1,126 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="container-fluid"> 
+    <form class="form-horizontal" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="author">Author:</label>
+          <div class="col-sm-10">
+            <input class="form-control" name="author" id="author" placeholder="Enter author of this document">
+          </div>
+          <label class="control-label col-sm-2" for="title">Title:</label>
+          <div class="col-sm-10">
+            <input class="form-control" name="title" id="title" placeholder="Enter title of this document">
+          </div>
+          <label class="control-label col-sm-2" for="description">Description:</label>
+          <div class="col-sm-10">
+            <input class="form-control" name="description" id="description" placeholder="Enter description of this document">
+          </div>
+          <label class="control-label col-sm-2" for="document">Document for upload</label>
+          <div class="col-sm-10">
+            <input  name='file' type="file" class="form-control-file" id="document" onchange="processSign(this)">
+          </div>
+          <div class="col-sm-10">
+              <input type="hidden" id="doc_hash" name="doc_hash" value="">
+          </div>
+          <div class="col-sm-offset-2 col-sm-10">
+            <button id="submit" class="btn btn-default" disabled>Submit</button>
+          </div>
+        </div>
+        
+    </form>
+    <div id="progress"></div>
+    {% if message %}
+    <div class="alert alert-warning" role="alert" style="display:inline-block;">{{ message }}</div>
+    {% endif %}
 
 </div>
+
+<script>
+    function processSign(){
+        var document_file = document.getElementById("document");
+        handleFileSelect(document_file);
+    }
+
+    function check_hash(doc_hash){
+        $.ajax({
+            type: 'GET',
+            data: {
+                'hash': doc_hash
+            },
+            url: '/check-hash',
+            success: function(e){
+                // uploadToS3(doc_hash);
+                // enable button upload
+                document.getElementById("doc_hash").value = doc_hash;
+                document.getElementById("submit").disabled = false;
+            },
+            error: function(e){
+                // set messsage for alert
+                alert("This document is already exist on blockchain database")
+
+            }
+        })
+    }
+</script>
+
+<script type="text/javascript" >
+    // How many bytes to read per chunk
+    var chunkSize = Math.pow(10, 5)
+    // Handle various I/O problems
+    function errorHandler(evt) {
+        switch(evt.target.error.code) {
+            case evt.target.error.NOT_FOUND_ERR:
+                alert('File Not Found!')
+                break
+            case evt.target.error.NOT_READABLE_ERR:
+                alert('File is not readable')
+                break
+            case evt.target.error.ABORT_ERR:
+                break // noop
+            default:
+                alert('An error occurred reading this file.')
+        }
+    }
+    // Recurse through async chunk reads
+    function readFile(hasher256, file, start, stop) {
+        var progress = document.querySelector('#progress')
+        // Only read to the end of the file
+        stop = (stop <= file.size) ? stop : file.size
+        // Prepare to read chunk
+        var reader = new FileReader()
+        reader.onerror = errorHandler
+        // If we use onloadend, we need to check the readyState.
+        reader.onloadend = function(evt) {
+            if (evt.target.readyState == FileReader.DONE) {
+                hasher256.update(evt.target.result)
+                var percent = Math.round((stop / file.size) * 100)
+                progress.innerHTML = 'Calculating SHA 256: ' + percent + '%'
+                // Recurse or finish
+                if (stop == file.size) {
+                    progress.innerHTML = "";
+                    result256 = hasher256.getHash('HEX')
+                    progress.innerHTML += '<p>SHA-256: ' + result256 + '</p>';
+                    check_hash(result256);
+                } else {
+                    readFile(hasher256, file, start + chunkSize, stop + chunkSize)
+                }
+            }
+        }
+        // Begin read
+        var blob = file.slice(start, stop)
+        reader.readAsArrayBuffer(blob)
+    }
+    function handleFileSelect(input) {
+        var progress = document.querySelector('#progress')
+        // Reset progress indicator on new file selection.
+        progress.innerHTML = 'Calculating SHA 256: 0%';
+        // Get file object from the form
+        var file = input.files[0];
+        var hasher256 = new jsSHA('SHA-256', 'ARRAYBUFFER')
+        // Read file in chunks
+        readFile(hasher256, file, 0, chunkSize)
+    }
+</script>
+<script type="text/javascript" src="https://rawgit.com/Caligatio/jsSHA/master/src/sha.js"></script>
+<script type="text/javascript" src="https://rawgit.com/openpgpjs/asmcrypto-lite/lite/asmcrypto.js"></script>
 {% endblock %}

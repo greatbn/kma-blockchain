@@ -1,0 +1,9 @@
+AWS_ACCESS_KEY = "FSVK3BMNDJKIXEG9PYO1"
+AWS_SECRET_KEY = "MZWBHY5uPumc1JWccNILJStQXvqtJmhdGcuQLpEh"
+S3_HOST = 's3.sapham.net'
+S3_PORT = 443
+S3_IS_SECURE = True
+
+S3_BUCKET = 'blockchain'
+
+UPLOAD_FOLDER = './uploads'

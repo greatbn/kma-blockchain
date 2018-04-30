@@ -4,30 +4,32 @@
     {% if pending_transactions|length == 0 %}
     <div class="alert alert-warning" role="alert" style="display:inline-block;">Blockchain network has no pending transaction</div>
     {% else %}
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>TxID</th>
-                <th>Timestamp</th>
-                <th>Author</th>
-                <th>Document Hash</th>
-                <th>S3 URL</th>
-                <th>Title</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for tx in pending_transactions %}
-            <tr>
-                <td>{{ tx['txid'] }}</td>
-                <td>{{ tx['timestamp'] }}</td>
-                <td>{{ tx['author'] }}</td>
-                <td>{{ tx['doc_hash'] }}</td>
-                <td>{{ tx['s3_url'] }}</td>
-                <td>{{ tx['title'] }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>TxID</th>
+                    <th>Timestamp</th>
+                    <th>Author</th>
+                    <th>Document Hash</th>
+                    <th>S3 URL</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tx in pending_transactions %}
+                <tr>
+                    <td>{{ tx['txid'] }}</td>
+                    <td>{{ tx['timestamp'] }}</td>
+                    <td>{{ tx['data']['author'] }}</td>
+                    <td>{{ tx['data']['doc_hash'] }}</td>
+                    <td>{{ tx['data']['s3_url'] }}</td>
+                    <td>{{ tx['data']['title'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endif %}
 {% endblock %}
