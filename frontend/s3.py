@@ -33,6 +33,7 @@ def upload_to_s3(file, key_name):
     key = Key(b)
     key.key = key_name
     key.set_contents_from_filename(file)
+    key.set_acl('public-read')
 
 if __name__ == '__main__':
 
