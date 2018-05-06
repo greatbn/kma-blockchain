@@ -12,12 +12,15 @@ class ElasticWrapper(object):
     def insert_document(self, doc):
         if type(doc) == dict:
             try:
-                self.es.index(
-                    index=config.ELASTIC_INDEX,
-                    doc_type='blockchain',
-                    body=doc
-                )
-                return True
+                if not self.check_txid(doc['txid']):
+                    self.es.index(
+                        index=config.ELASTIC_INDEX,
+                        doc_type='blockchain',
+                        body=doc
+                    )
+                    return True
+                else:
+                    return True
             except Exception as e:
                 raise Exception(e)
         return False
@@ -25,6 +28,20 @@ class ElasticWrapper(object):
     def flush_document(self):
         requests.delete(config.ELASTIC_HOST + '/' + config.ELASTIC_INDEX)
         return True
+
+    def check_txid(self, txid):
+        query = {
+            'query': {
+                'match': {
+                    'txid': txid
+                }
+            }
+        }
+        r = requests.get(config.ELASTIC_HOST + '/_search', json=query)
+        if r.json()['hits']['total'] >= 1:
+            return True
+        else:
+            return False
 
     def search_document(self, keyword):
         query = {
