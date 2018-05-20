@@ -13,7 +13,7 @@ def sign(data, private_key):
     digest.update(data)
     signature = signer.sign(digest)
 
-    return b64encode(signature)
+    return signature.encode('hex')
 
 
 def verify(data, signature, public_key):
@@ -26,16 +26,16 @@ def verify(data, signature, public_key):
     verifier = PKCS1_v1_5.new(public_key)
     digest = SHA256.new()
     digest.update(data)
-    verified = verifier.verify(digest, b64decode(signature))
+    verified = verifier.verify(digest, signature.decode('hex'))
     if verified:
         return True
     return False
 
 
 if __name__ == '__main__':
-    private_key = open('../test/key/id_rsa', 'r').read()
-    public_key = open('../test/key/id_rsa.pub', 'r').read()
-    data = 'Im Sa Pham'
+    private_key = open('../test/key/key.pem', 'r').read()
+    public_key = open('../test/key/public.pem', 'r').read()
+    data = '62d49a9b4d0c804f7de5578dc0df21f754a6b5c43e491271b9c267674189bd7f'
     print "Sign data"
     signature = sign(data, private_key)
     print "Signature ", signature
