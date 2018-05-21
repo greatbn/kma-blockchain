@@ -58,6 +58,7 @@ def sign():
             'title': request.form.get('title'),
             'description': request.form.get('description'),
             'doc_hash': request.form.get('doc_hash'),
+            'signature': request.form.get('signature'),
             's3_url': 'https://blockchain.s3.sapham.net/{}'.format(request.form.get('doc_hash'))
         }
         new_tx = utils.create_new_transaction(data)

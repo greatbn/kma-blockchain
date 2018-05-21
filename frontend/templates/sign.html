@@ -15,12 +15,19 @@
           <div class="col-sm-10">
             <input class="form-control" name="description" id="description" placeholder="Enter description of this document">
           </div>
+          <label class="control-label col-sm-2" for="private_key">Your private key to sign this document</label>
+          <div class="col-sm-10">
+            <input name="private_key" type="file" class="form-control-file" id="private_key">
+          </div>
           <label class="control-label col-sm-2" for="document">Document for upload</label>
           <div class="col-sm-10">
             <input  name='file' type="file" class="form-control-file" id="document" onchange="processSign(this)">
           </div>
           <div class="col-sm-10">
-              <input type="hidden" id="doc_hash" name="doc_hash" value="">
+            <input type="hidden" id="doc_hash" name="doc_hash" value="">
+          </div>
+          <div class="col-sm-10">
+            <input type="hidden" id="signature" name="signature" value="">
           </div>
           <div class="col-sm-offset-2 col-sm-10">
             <button id="submit" class="btn btn-default" disabled>Submit</button>
@@ -100,7 +107,9 @@
                     progress.innerHTML = "";
                     result256 = hasher256.getHash('HEX')
                     progress.innerHTML += '<p>SHA-256: ' + result256 + '</p>';
+                    generateSignature(result256);
                     check_hash(result256);
+                    
                 } else {
                     readFile(hasher256, file, start + chunkSize, stop + chunkSize)
                 }
@@ -120,7 +129,28 @@
         // Read file in chunks
         readFile(hasher256, file, 0, chunkSize)
     }
+    function generateSignature(doc_hash){
+        var private_key = document.getElementById('private_key');
+        if (private_key.files.length) {
+            var reader = new FileReader()
+            reader.onload = function(e) {
+                // document.getElementById('signature').innerHTML = e.target.result;
+                // load private key content
+                var private_key_content = e.target.result;
+                console.log(private_key_content);
+                /// generate signature for file
+                var rsa = new RSAKey();
+                rsa.readPrivateKeyFromPEMString(private_key_content);
+                var hSig = rsa.sign(doc_hash, 'sha256');
+                console.log(hSig);
+                document.getElementById('signature').value = hSig;
+            }
+            reader.readAsBinaryString(private_key.files[0])
+        }
+        console.log()
+    }
 </script>
 <script type="text/javascript" src="https://rawgit.com/Caligatio/jsSHA/master/src/sha.js"></script>
 <script type="text/javascript" src="https://rawgit.com/openpgpjs/asmcrypto-lite/lite/asmcrypto.js"></script>
+<script type="text/javascript" src="https://kjur.github.io/jsrsasign/jsrsasign-all-min.js"></script>
 {% endblock %}
