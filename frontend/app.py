@@ -46,8 +46,8 @@ def sign():
     """
     if request.method == 'GET':
         return render_template("sign.html")
-    elif request.method == 'POST' and request.files['file']:
-        file = request.files['file']
+    elif request.method == 'POST' and request.files['document']:
+        file = request.files['document']
         filename = secure_filename(file.filename)
         create_new_folder(app.config['UPLOAD_FOLDER'])
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
